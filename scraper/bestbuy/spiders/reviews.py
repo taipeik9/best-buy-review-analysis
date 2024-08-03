@@ -13,7 +13,7 @@ class ReviewsSpider(scrapy.Spider):
         for product in products:
             yield scrapy.Request(
                 url=f'https://www.bestbuy.ca/api/reviews/v2/products/{product["sku"]}/'
-                'reviews?source=all&lang=en-CA&pageSize=100&page=1&sortBy=relevancy&hasPhotosFilter=true',
+                'reviews?source=all&lang=en-CA&pageSize=100&page=1&sortBy=relevancy',
                 callback=self.parse,
             )
 
