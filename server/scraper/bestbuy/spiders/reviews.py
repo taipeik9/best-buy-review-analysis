@@ -1,6 +1,8 @@
 import scrapy
 import json
 
+from ..items import Review
+
 
 # Spider that crawls through Best Buy Reviews
 class ReviewsSpider(scrapy.Spider):
@@ -14,10 +16,10 @@ class ReviewsSpider(scrapy.Spider):
 
         for product in products:
             yield scrapy.Request(
-                url=f'https://www.bestbuy.ca/api/reviews/v2/products/{product["sku"]}/'
+                url=f'https://www.bestbuy.ca/api/reviews/v2/products/{product["id"]}/'
                 'reviews?source=all&lang=en-CA&pageSize=100&page=1&sortBy=relevancy',
                 callback=self.parse,
-                meta={"sku": product["sku"]},
+                meta={"id": product["id"]},
             )
 
     # Parsing the review pages
@@ -30,21 +32,25 @@ class ReviewsSpider(scrapy.Spider):
 
         reviews = json.loads(response.body)["reviews"]
 
-        # Check, if reviews is empty then we are at the end and there is nothing else to yield
+        # Yielding reviews until there are no more
         if reviews:
             for review in reviews:
-                yield {
-                    "review_id": review["id"],
-                    "rating": review["rating"],
-                    "title": review["title"],
-                    "content": review["comment"],
-                    "date": review["submissionTime"],
-                    "reviewer_name": review["reviewerName"],
-                    "reviewer_location": review.get("reviewerLocation", ""),
-                    "verified_purchase": review["isVerifiedPurchaser"],
-                }
+                reviewItem = Review()
+
+                reviewItem["id"] = review["id"]
+                reviewItem["rating"] = review["rating"]
+                reviewItem["title"] = review["title"]
+                reviewItem["content"] = review.get("comment", None)
+                reviewItem["date"] = review["submissionTime"]
+                reviewItem["reviewer_name"] = review["reviewerName"]
+                reviewItem["reviewer_location"] = review.get("reviewerLocation", None)
+                reviewItem["verified_purchase"] = review["isVerifiedPurchaser"]
+                reviewItem["product_id"] = response.request.meta["id"]
+
+                yield reviewItem
 
             yield response.follow(
-                url=f'https://www.bestbuy.ca/api/reviews/v2/products/{response.request.meta["sku"]}/'
-                f'reviews?source=all&lang=en-CA&pageSize=100&page={page}&sortBy=relevancy'
+                url=f'https://www.bestbuy.ca/api/reviews/v2/products/{response.request.meta["id"]}/'
+                f'reviews?source=all&lang=en-CA&pageSize=100&page={page + 1}&sortBy=relevancy',
+                meta={"page": page + 1, "id": response.request.meta["id"]},
             )

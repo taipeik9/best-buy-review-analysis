@@ -1,28 +1,35 @@
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
+import os
 
-import multiprocessing
+from twisted.internet import reactor, defer
+
+from scrapy.crawler import CrawlerRunner
+from scrapy.utils.log import configure_logging
+from scrapy.utils.project import get_project_settings
 
 from bestbuy.spiders.products import ProductsSpider
 from bestbuy.spiders.reviews import ReviewsSpider
 
+from upload import upload_products_and_reviews
 
-def run_crawler(settings, spider):
-    process = CrawlerProcess(settings)
-    process.crawl(spider)
-    process.start()
-
-
+# This script runs the two scrapers sequentially (from the docs) https://docs.scrapy.org/en/latest/topics/practices.html
 if __name__ == "__main__":
+    # Getting project settings and configuring logger
     settings = get_project_settings()
-    settings["FEED_FORMAT"] = "json"
-    settings["FEED_EXPORT_ENCODING"] = "utf-8"
+    configure_logging(settings)
+    runner = CrawlerRunner(settings)
 
-    spiders = [ProductsSpider, ReviewsSpider]
+    # Function to run crawlers sequentially
+    @defer.inlineCallbacks
+    def crawl():
+        yield runner.crawl(ProductsSpider, query="computers")
+        yield runner.crawl(ReviewsSpider)
+        reactor.stop()
 
-    for i, spider in enumerate(spiders):
-        settings["FEED_URI"] = "products.json" if i == 0 else "reviews.json"
+    crawl()
+    reactor.run()  # script blocks here until the last crawl call is finished
 
-        p = multiprocessing.Process(target=run_crawler, args=(settings, spider))
-        p.start()
-        p.join()
+    upload_products_and_reviews("products.json", "reviews.json")
+
+    # Cleanup
+    os.remove("products.json")
+    os.remove("reviews.json")

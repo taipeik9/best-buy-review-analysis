@@ -1,6 +1,8 @@
 import scrapy
 import json
 
+from ..items import Product
+
 
 # Spider that crawls through Best Buy Products
 class ProductsSpider(scrapy.Spider):
@@ -14,6 +16,7 @@ class ProductsSpider(scrapy.Spider):
             self.start_urls = [
                 f"https://www.bestbuy.ca/api/v2/json/search?lang=en-CA&page={start_page}&pageSize=100&query={query}"
             ]
+            self.start_page = start_page
             self.max_pages = max_pages
         else:
             raise Exception("Query must be provided")
@@ -33,19 +36,21 @@ class ProductsSpider(scrapy.Spider):
             for product in products:
                 # Ignoring all products which don't have reviews
                 if product["customerRatingCount"] > 0:
-                    yield {
-                        "sku": product["sku"],
-                        "title": product["name"],
-                        "short_description": product["shortDescription"],
-                        "avg_rating": product["customerRating"],
-                        "rating_count": product["customerRatingCount"],
-                        "regular_price": product["regularPrice"],
-                        "sale_price": product["salePrice"],
-                        "category_name": product["categoryName"],
-                    }
+                    productItem = Product()
+
+                    productItem["id"] = product["sku"]
+                    productItem["title"] = product["name"]
+                    productItem["short_description"] = product["shortDescription"]
+                    productItem["avg_rating"] = product["customerRating"]
+                    productItem["rating_count"] = product["customerRatingCount"]
+                    productItem["regular_price"] = product["regularPrice"]
+                    productItem["sale_price"] = product["salePrice"]
+                    productItem["category_name"] = product["categoryName"]
+
+                    yield productItem
 
             yield response.follow(
-                url=f"https://www.bestbuy.ca/api/v2/json/search?lang=en-CA&page={page}&pageSize=100&query={self.query}",
+                url=f"https://www.bestbuy.ca/api/v2/json/search?lang=en-CA&page={page + 1}&pageSize=100&query={self.query}",
                 meta={"page_number": page + 1},
                 callback=self.parse,
             )
