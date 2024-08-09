@@ -8,11 +8,17 @@ from ..items import Review
 class ReviewsSpider(scrapy.Spider):
     name = "reviews"
     allowed_domains = ["www.bestbuy.ca"]
+    count = 0
+    total_products = 0
+
+    def __init__(self, socket=None, **kwargs):
+        self.socket = socket
 
     def start_requests(self):
         # Opening the products json to find reviews for them
         with open("products.json") as f:
             products = json.load(f)
+        self.total_products = len(products)
 
         for product in products:
             yield scrapy.Request(
@@ -26,7 +32,7 @@ class ReviewsSpider(scrapy.Spider):
     def parse(self, response):
         # Trying to find page number in meta data, if it isn't there, then this is the start page
         try:
-            page = response.meta["page_number"]
+            page = response.meta["page"]
         except KeyError:
             page = 1
 
@@ -54,3 +60,16 @@ class ReviewsSpider(scrapy.Spider):
                 f'reviews?source=all&lang=en-CA&pageSize=100&page={page + 1}&sortBy=relevancy',
                 meta={"page": page + 1, "id": response.request.meta["id"]},
             )
+        else:
+            # If socket is enabled then we will send the number of scraped items so far back to the client
+            if self.socket:
+                self.count += 1
+                self.socket.recv_json()
+                self.socket.send_string(
+                    json.dumps(
+                        {
+                            "message": f"Scraped reviews from {self.count}/{self.total_products}",
+                            "scraping": True,
+                        }
+                    )
+                )

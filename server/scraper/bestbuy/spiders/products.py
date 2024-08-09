@@ -11,7 +11,7 @@ class ProductsSpider(scrapy.Spider):
     query = "computers"
 
     # Initializing with custom args
-    def __init__(self, query=None, start_page=1, max_pages=10, **kwargs):
+    def __init__(self, query=None, start_page=1, max_pages=1, **kwargs):
         if query:
             self.start_urls = [
                 f"https://www.bestbuy.ca/api/v2/json/search?lang=en-CA&page={start_page}&pageSize=100&query={query}"
