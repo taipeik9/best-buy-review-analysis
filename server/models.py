@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, Date
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from database import Base
 
 
 class Product(Base):
@@ -33,3 +33,7 @@ class Review(Base):
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
 
     product = relationship("Product", back_populates="reviews")
+
+
+# class ScrapingSession(Base):
+#     __tablename__ = "scraping_sessions"
