@@ -1,0 +1,9 @@
+services:
+  api:
+    build: .
+    container_name: bestbuy-reviews
+    environment:
+      PORT: 80
+    ports:
+      - "80:80"
+    restart: "no"
