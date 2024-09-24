@@ -293,3 +293,5 @@ dist
 .pnp.*
 
 .DS_Store
+
+*.db
