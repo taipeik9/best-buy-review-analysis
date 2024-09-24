@@ -55,6 +55,7 @@ def run_scraper(db: Session, query: str, session: UUID):
     os.remove("products.json")
     os.remove("reviews.json")
 
+    # Updating session once scraping is finished
     update_scraping_session(db, session.id)
 
 

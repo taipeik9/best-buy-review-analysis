@@ -292,6 +292,12 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Mac Misc
 .DS_Store
 
+# Database
 *.db
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
