@@ -96,6 +96,18 @@ def get_reviews_by_session_id(
     )
 
 
+def get_reviews_by_product_id(
+    db: Session, product_id: int, skip: int = 0, limit: int = 100
+):
+    return (
+        db.query(models.Review)
+        .filter(models.Review.product_id == product_id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+
 # create review
 def create_review(
     db: Session,

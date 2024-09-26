@@ -67,12 +67,21 @@ def read_review(review_id: int, db: Session = Depends(get_db)):
     return review
 
 
-@app.get("/reviews/{session_id}", response_model=list[schemas.ReviewBase])
+@app.get("/sessions/{session_id}/reviews/", response_model=list[schemas.ReviewBase])
 def read_reviews_by_session_id(
     session_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):
     return crud.get_reviews_by_session_id(
         db, session_id=session_id, skip=skip, limit=limit
+    )
+
+
+@app.get("/products/{product_id}/reviews/", response_model=list[schemas.ReviewBase])
+def read_reviews_by_product_id(
+    product_id, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    return crud.get_reviews_by_product_id(
+        db, product_id=product_id, skip=skip, limit=limit
     )
 
 
