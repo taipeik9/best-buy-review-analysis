@@ -78,7 +78,7 @@ def get_review(db: Session, review_id: int):
     return db.query(models.Review).filter(models.Review.id == review_id).first()
 
 
-# get all products
+# get all reviews
 def get_reviews(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Review).offset(skip).limit(limit).all()
 

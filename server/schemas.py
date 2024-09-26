@@ -25,7 +25,7 @@ class ReviewBase(BaseModel):
     rating: int
     title: str
     content: Union[str, None]
-    date: str
+    date: Union[str, datetime]
     reviewer_name: str
     reviewer_location: Union[str, None]
     verified_purchase: bool

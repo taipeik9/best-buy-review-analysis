@@ -35,7 +35,7 @@ def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     return products
 
 
-@app.get("/products/{product_id}", response_model=list[schemas.ProductBase])
+@app.get("/products/{product_id}", response_model=schemas.ProductBase)
 def read_product(product_id: int, db: Session = Depends(get_db)):
     product = crud.get_product(db, product_id=product_id)
     if product is None:
@@ -55,6 +55,21 @@ def batch_create_products(
     products: list[schemas.ProductBase], db: Session = Depends(get_db)
 ):
     return crud.batch_create_product(db, products=products)
+
+
+@app.get("/reviews/{review_id}", response_model=schemas.ReviewBase)
+def read_review(review_id: int, db: Session = Depends(get_db)):
+    review = crud.get_review(db, review_id=review_id)
+    if review is None:
+        raise HTTPException(
+            status_code=404, detail=f"Review with review id {review_id} was not found"
+        )
+    return review
+
+
+@app.get("/reviews/", response_model=list[schemas.ReviewBase])
+def read_reviews(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_reviews(db, skip=skip, limit=limit)
 
 
 @app.post("/review/")
