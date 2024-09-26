@@ -83,6 +83,19 @@ def get_reviews(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Review).offset(skip).limit(limit).all()
 
 
+# get reviews by session id
+def get_reviews_by_session_id(
+    db: Session, session_id: str, skip: int = 0, limit: int = 100
+):
+    return (
+        db.query(models.Review)
+        .filter(models.Review.session_id == session_id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+
 # create review
 def create_review(
     db: Session,
@@ -144,6 +157,11 @@ def get_scraping_session(db: Session, session_id: UUID):
         .filter(models.ScrapingSession.id == session_id)
         .first()
     )
+
+
+# get all scraping sessions
+def get_scraping_sessions(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.ScrapingSession).offset(skip).limit(limit).all()
 
 
 # create scraping session

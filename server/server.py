@@ -35,7 +35,7 @@ def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     return products
 
 
-@app.get("/products/{product_id}", response_model=schemas.ProductBase)
+@app.get("/product/{product_id}", response_model=schemas.ProductBase)
 def read_product(product_id: int, db: Session = Depends(get_db)):
     product = crud.get_product(db, product_id=product_id)
     if product is None:
@@ -57,7 +57,7 @@ def batch_create_products(
     return crud.batch_create_product(db, products=products)
 
 
-@app.get("/reviews/{review_id}", response_model=schemas.ReviewBase)
+@app.get("/review/{review_id}", response_model=schemas.ReviewBase)
 def read_review(review_id: int, db: Session = Depends(get_db)):
     review = crud.get_review(db, review_id=review_id)
     if review is None:
@@ -67,17 +67,26 @@ def read_review(review_id: int, db: Session = Depends(get_db)):
     return review
 
 
+@app.get("/reviews/{session_id}", response_model=list[schemas.ReviewBase])
+def read_reviews_by_session_id(
+    session_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    return crud.get_reviews_by_session_id(
+        db, session_id=session_id, skip=skip, limit=limit
+    )
+
+
 @app.get("/reviews/", response_model=list[schemas.ReviewBase])
 def read_reviews(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_reviews(db, skip=skip, limit=limit)
 
 
-@app.post("/review/")
+@app.post("/review/", response_model=schemas.ReviewBase)
 def create_review(review: schemas.ReviewBase, db: Session = Depends(get_db)):
     return crud.create_review(db, review=review)
 
 
-@app.post("/reviews/")
+@app.post("/reviews/", response_model=list[schemas.ReviewBase])
 def create_reviews(reviews: list[schemas.ReviewBase], db: Session = Depends(get_db)):
     return crud.batch_create_reviews(db, reviews=reviews)
 
@@ -89,6 +98,11 @@ async def scrape_reviews(
     db: Session = Depends(get_db),
 ):
     return crawl.scrape_reviews(db, scrape=scrape, background_tasks=background_tasks)
+
+
+@app.get("/sessions/", response_model=list[schemas.ScrapingSessionBase])
+def read_sessions(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
+    return crud.get_scraping_sessions(db, skip=skip, limit=limit)
 
 
 @app.post("/session/", response_model=schemas.ScrapingSessionBase)
