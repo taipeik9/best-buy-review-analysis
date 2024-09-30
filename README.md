@@ -2,8 +2,11 @@
 
 This is a best buy review scraper web application. Currently in version 0.1!
 
-(Demo is pending)
-<img width="1209" alt="home" src="https://github.com/user-attachments/assets/0958fc4f-9c59-4725-ac7e-c44073a06362">
+Demo:
+
+https://github.com/user-attachments/assets/f4cca906-91d3-49e9-9ee6-c66703c835aa
+
+
 
 With this web app you can search query whatever you want on Best Buy and collect all of the resulting products and their review data.
 
@@ -30,6 +33,9 @@ Looking forward, these are the next tasks I want to tackle:
 Feel free to message me if you have any questions about this project :).
 
 ### Screenshots of other pages:
+
+Home Page:
+<img width="1209" alt="home" src="https://github.com/user-attachments/assets/0958fc4f-9c59-4725-ac7e-c44073a06362">
 
 Products Page:
 <img width="1174" alt="products" src="https://github.com/user-attachments/assets/8e7fb0a9-bc75-46e5-aa59-183f3ca05135">
