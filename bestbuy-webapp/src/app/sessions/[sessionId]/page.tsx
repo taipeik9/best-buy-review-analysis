@@ -1,27 +1,35 @@
-import { Session, Review } from "../../(assets)/types";
+import { Product, Session } from "@/app/(assets)/types";
+import ItemCard from "@/app/(components)/ItemCard";
+import { Container, Typography } from "@mui/material";
 
-export default async function SessionDetails({
+export default async function ProductDetails({
   params,
 }: {
   params: { sessionId: string };
 }) {
-  const response = await fetch(
-    `http://0.0.0.0:80/sessions/${params.sessionId}/reviews/`
+  const sessionResponse = await fetch(
+    `http://0.0.0.0:80/sessions/${params.sessionId}/`
   );
-  const reviews = await response.json();
+  const session: Session = await sessionResponse.json();
+
+  const reviewResponse = await fetch(
+    `http://0.0.0.0:80/sessions/${params.sessionId}/products/`,
+    { cache: "no-store" }
+  );
+  const products: Product[] = await reviewResponse.json();
 
   return (
-    <>
-      <h1>Session Details {params.sessionId}</h1>
-      <h2>Reviews:</h2>
-      {reviews.map((review: Review) => (
-        <div key={review.id}>
-          <p>{review.id}</p>
-          <p>{review.rating}</p>
-          <p>{review.title}</p>
-          <p>{review.content}</p>
-        </div>
+    <Container>
+      <Typography variant="h1">Session Details</Typography>
+      <ItemCard item={session}></ItemCard>
+      <Typography variant="h2">Products</Typography>
+      {products.map((product: Product) => (
+        <ItemCard
+          key={product.id}
+          item={product}
+          href={`/products/${product.id}`}
+        />
       ))}
-    </>
+    </Container>
   );
 }

@@ -19,6 +19,15 @@ def get_products(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Product).offset(skip).limit(limit).all()
 
 
+# get products by session id
+def get_products_by_session_id(db: Session, session_id: str):
+    return (
+        db.query(models.Product)
+        .filter(models.Product.session_id == UUID(session_id))
+        .all()
+    )
+
+
 # create product
 def create_product(
     db: Session,
@@ -80,7 +89,13 @@ def get_review(db: Session, review_id: int):
 
 # get all reviews
 def get_reviews(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Review).offset(skip).limit(limit).all()
+    return (
+        db.query(models.Review)
+        .order_by(models.Review.date.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 # get reviews by session id
@@ -89,19 +104,22 @@ def get_reviews_by_session_id(
 ):
     return (
         db.query(models.Review)
-        .filter(models.Review.session_id == session_id)
+        .filter(models.Review.session_id == UUID(session_id))
+        .order_by(models.Review.date.desc())
         .offset(skip)
         .limit(limit)
         .all()
     )
 
 
+# get reviews by product id
 def get_reviews_by_product_id(
     db: Session, product_id: int, skip: int = 0, limit: int = 100
 ):
     return (
         db.query(models.Review)
         .filter(models.Review.product_id == product_id)
+        .order_by(models.Review.date.desc())
         .offset(skip)
         .limit(limit)
         .all()
@@ -162,7 +180,7 @@ def batch_create_reviews(
     return db_reviews
 
 
-# get scraping session
+# get scraping session by id
 def get_scraping_session(db: Session, session_id: UUID):
     return (
         db.query(models.ScrapingSession)

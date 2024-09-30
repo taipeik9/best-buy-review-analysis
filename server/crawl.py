@@ -23,8 +23,6 @@ from crud import (
     update_scraping_session,
 )
 
-import schemas
-
 
 # This function creates the scraping process (its passed into multiprocess as the target in the function below it)
 def scrape(spider: Spider, query: str = None):
@@ -60,13 +58,11 @@ def run_scraper(db: Session, query: str, session: UUID):
 
 
 # scrape reviews, this is the controller which is called from the scrape route
-def scrape_reviews(
-    db: Session, scrape: schemas.Scrape, background_tasks: BackgroundTasks
-):
+def scrape_reviews(db: Session, query: str, background_tasks: BackgroundTasks):
     session = create_scraping_session(db)
-    background_tasks.add_task(run_scraper, db=db, query=scrape.query, session=session)
+    background_tasks.add_task(run_scraper, db=db, query=query, session=session)
 
     return {
-        "detail": f"Started scraping query {scrape.query}",
+        "detail": f"Started scraping query {query}",
         "session_id": session.id,
     }

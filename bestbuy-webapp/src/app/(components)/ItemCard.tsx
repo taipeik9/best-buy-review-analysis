@@ -1,7 +1,6 @@
-import { Box, Typography } from "@mui/material";
-import { Product, Review } from "../(assets)/types";
+import { Box, Button, Typography } from "@mui/material";
 
-export default function ItemCard({ item }: { item: any }) {
+export default function ItemCard({ item, href }: { item: any; href?: string }) {
   return (
     <Box
       key={item.id}
@@ -16,10 +15,15 @@ export default function ItemCard({ item }: { item: any }) {
       {Object.keys(item).map((key) => {
         return (
           <Typography key={`${key}${item[key]}`}>
-            {key}: {item[key]}
+            {key}: {`${item[key]}`}
           </Typography>
         );
       })}
+      {href && (
+        <Button variant="outlined" href={href}>
+          View Details
+        </Button>
+      )}
     </Box>
   );
 }

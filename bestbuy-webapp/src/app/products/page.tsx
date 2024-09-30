@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { Product } from "../(assets)/types";
 import ItemCard from "../(components)/ItemCard";
 
@@ -10,7 +10,11 @@ export default async function ProductsPage() {
     <Container>
       <Typography variant="h1">Products</Typography>
       {products.map((product: Product) => (
-        <ItemCard key={product.id} item={product}></ItemCard>
+        <ItemCard
+          key={product.id}
+          item={product}
+          href={`/products/${product.id}`}
+        />
       ))}
     </Container>
   );

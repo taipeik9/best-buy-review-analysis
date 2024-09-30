@@ -1,12 +1,6 @@
 import { Roboto } from "next/font/google";
 import { theme } from "./(assets)/theme";
-import {
-  AppBar,
-  Container,
-  ThemeProvider,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import NavBar from "./(components)/NavBar";
 
 export const metadata = {
@@ -32,7 +26,6 @@ export default function RootLayout({
         <ThemeProvider theme={theme}>
           <NavBar />
           {children}
-          <footer>Footer</footer>
         </ThemeProvider>
       </body>
     </html>

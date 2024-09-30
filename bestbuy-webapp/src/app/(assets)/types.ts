@@ -1,7 +1,7 @@
 export type Session = {
   id: string;
   scraping_started: string;
-  scraping_finished: string;
+  scraping_finished: string | null;
   done: boolean;
 };
 
@@ -29,3 +29,5 @@ export type Product = {
   category_name: string;
   session_id: string;
 };
+
+export type Column = { name: string; id: string };

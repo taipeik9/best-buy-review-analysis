@@ -27,7 +27,7 @@ class Product(Base):
     sale_price = Column(Float, nullable=False)
     category_name = Column(String, nullable=False)
     session_id = Column(
-        UUID(as_uuid=False), ForeignKey("scraping_sessions.id"), nullable=True
+        UUID(as_uuid=True), ForeignKey("scraping_sessions.id"), nullable=True
     )
 
     reviews = relationship("Review", back_populates="product")
@@ -47,7 +47,7 @@ class Review(Base):
     verified_purchase = Column(Boolean, nullable=False)
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     session_id = Column(
-        UUID(as_uuid=False), ForeignKey("scraping_sessions.id"), nullable=True
+        UUID(as_uuid=True), ForeignKey("scraping_sessions.id"), nullable=True
     )
 
     product = relationship("Product", back_populates="reviews")

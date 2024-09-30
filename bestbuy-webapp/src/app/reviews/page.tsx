@@ -3,7 +3,9 @@ import ItemCard from "../(components)/ItemCard";
 import { Review } from "../(assets)/types";
 
 export default async function Reviews() {
-  const response = await fetch("http://0.0.0.0/reviews/");
+  const response = await fetch("http://0.0.0.0/reviews/", {
+    cache: "no-store",
+  });
   const reviews = await response.json();
 
   return (

@@ -41,10 +41,3 @@ class ScrapingSessionBase(BaseModel):
     scraping_started: datetime
     scraping_finished: Union[datetime, None]
     done: bool
-
-
-class Scrape(BaseModel):
-    query: str
-
-    class Config:
-        orm_mode = True
