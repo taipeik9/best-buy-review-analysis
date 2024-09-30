@@ -1,4 +1,4 @@
-import { Session, Review } from "../../(services)/types";
+import { Session, Review } from "../../(assets)/types";
 
 export default async function SessionDetails({
   params,

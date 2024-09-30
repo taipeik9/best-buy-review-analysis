@@ -1,19 +1,17 @@
-import { Session } from "../(services)/types";
+import { Container, Typography } from "@mui/material";
+import { Session } from "../(assets)/types";
+import ItemCard from "../(components)/ItemCard";
 
 export default async function SessionsPage() {
   const response = await fetch("http://0.0.0.0:80/sessions/");
   const sessions = await response.json();
 
   return (
-    <div>
+    <Container>
+      <Typography variant="h1">Sessions</Typography>
       {sessions.map((session: Session) => (
-        <div key={session.id}>
-          <p>{session.id}</p>
-          <p>{session.scraping_started}</p>
-          <p>{session.scraping_finished}</p>
-          <p>{String(session.done)}</p>
-        </div>
+        <ItemCard key={session.id} item={session}></ItemCard>
       ))}
-    </div>
+    </Container>
   );
 }

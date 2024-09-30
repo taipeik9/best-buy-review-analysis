@@ -1,26 +1,17 @@
-import { Product } from "../(services)/types";
+import { Box, Container, Typography } from "@mui/material";
+import { Product } from "../(assets)/types";
+import ItemCard from "../(components)/ItemCard";
 
-export default async function ProductsPage({
-  params,
-}: {
-  params: { productId: string };
-}) {
+export default async function ProductsPage() {
   const response = await fetch("http://0.0.0.0/products/");
   const products = await response.json();
 
   return (
-    <>
-      <h1>Products {params.productId}</h1>
+    <Container>
+      <Typography variant="h1">Products</Typography>
       {products.map((product: Product) => (
-        <div key={product.id}>
-          <p>{product.id}</p>
-          <p>{product.title}</p>
-          <p>{product.short_description}</p>
-          <p>{product.avg_rating}</p>
-          <p>{product.sale_price}</p>
-          <p>{product.regular_price}</p>
-        </div>
+        <ItemCard key={product.id} item={product}></ItemCard>
       ))}
-    </>
+    </Container>
   );
 }
