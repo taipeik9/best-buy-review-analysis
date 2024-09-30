@@ -25,7 +25,7 @@ class ReviewBase(BaseModel):
     rating: int
     title: str
     content: Union[str, None]
-    date: str
+    date: Union[str, datetime]
     reviewer_name: str
     reviewer_location: Union[str, None]
     verified_purchase: bool
@@ -41,10 +41,3 @@ class ScrapingSessionBase(BaseModel):
     scraping_started: datetime
     scraping_finished: Union[datetime, None]
     done: bool
-
-
-class Scrape(BaseModel):
-    query: str
-
-    class Config:
-        orm_mode = True
