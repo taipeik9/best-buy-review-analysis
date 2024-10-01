@@ -88,7 +88,7 @@ def read_review(review_id: int, db: Session = Depends(get_db)):
 
 
 # get reviews by session id
-@app.get("/sessions/{session_id}/reviews/", response_model=list[schemas.ReviewBase])
+@app.get("/sessions/{session_id}/reviews/", response_model=schemas.ListResponse)
 def read_reviews_by_session_id(
     session_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):
@@ -98,7 +98,7 @@ def read_reviews_by_session_id(
 
 
 # get reviews by product id
-@app.get("/products/{product_id}/reviews/", response_model=list[schemas.ReviewBase])
+@app.get("/products/{product_id}/reviews/", response_model=schemas.ListResponse)
 def read_reviews_by_product_id(
     product_id, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):

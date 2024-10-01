@@ -24,7 +24,7 @@ export default async function ProductDetails({
     `http://0.0.0.0:80/products/${params.productId}/reviews/`,
     { cache: "no-store" }
   );
-  const reviews: Review = await reviewResponse.json();
+  const reviews = await reviewResponse.json();
 
   const fetchMoreData = async (skip: number) => {
     "use server";
@@ -34,7 +34,7 @@ export default async function ProductDetails({
     );
     const reviews = await response.json();
 
-    return reviews;
+    return reviews.data;
   };
 
   return (
@@ -44,7 +44,8 @@ export default async function ProductDetails({
       <Typography variant="h2">Reviews</Typography>
       <BasicTable
         columns={columns}
-        rows={reviews}
+        rows={reviews.data}
+        total={reviews.total}
         fetchMoreData={fetchMoreData}
       />
     </Container>

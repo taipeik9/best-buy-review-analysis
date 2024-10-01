@@ -16,10 +16,12 @@ import { useRouter } from "next/navigation";
 export default function BasicTable({
   columns,
   rows,
+  total,
   fetchMoreData,
 }: {
   columns: Column[];
   rows: any;
+  total: number;
   fetchMoreData: (skip: number) => any;
 }) {
   const [page, setPage] = useState(0);
@@ -33,7 +35,7 @@ export default function BasicTable({
       const newData = data.concat(newRows);
       setData(newData);
     };
-    if (page * rowsPerPage >= data.length) {
+    if (page * rowsPerPage + rowsPerPage >= data.length) {
       fetchData();
     }
   }, [page, rowsPerPage]);
@@ -42,7 +44,6 @@ export default function BasicTable({
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    console.log(newPage * rowsPerPage);
     setPage(newPage);
   };
 
@@ -83,7 +84,7 @@ export default function BasicTable({
       </Table>
       <TablePagination
         component="div"
-        count={300}
+        count={total}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}

@@ -41,3 +41,8 @@ class ScrapingSessionBase(BaseModel):
     scraping_started: datetime
     scraping_finished: Union[datetime, None]
     done: bool
+
+
+class ListResponse(BaseModel):
+    total: int
+    data: list[Union[ProductBase, ReviewBase, ScrapingSessionBase]]
