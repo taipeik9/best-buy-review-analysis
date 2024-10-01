@@ -8,7 +8,8 @@ export default async function ProductDetails({
   params: { sessionId: string };
 }) {
   const sessionResponse = await fetch(
-    `http://0.0.0.0:80/sessions/${params.sessionId}/`
+    `http://0.0.0.0:80/sessions/${params.sessionId}/`,
+    { cache: "no-store" }
   );
   const session: Session = await sessionResponse.json();
 

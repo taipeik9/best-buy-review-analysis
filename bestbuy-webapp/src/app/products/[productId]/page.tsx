@@ -26,12 +26,27 @@ export default async function ProductDetails({
   );
   const reviews: Review = await reviewResponse.json();
 
+  const fetchMoreData = async (skip: number) => {
+    "use server";
+    const response = await fetch(
+      `http://0.0.0.0:80/products/${params.productId}/reviews/?skip=${skip}`,
+      { cache: "no-store" }
+    );
+    const reviews = await response.json();
+
+    return reviews;
+  };
+
   return (
     <Container>
       <Typography variant="h1">Product Details: {product.id}</Typography>
       <ItemCard item={product}></ItemCard>
       <Typography variant="h2">Reviews</Typography>
-      <BasicTable columns={columns} rows={reviews} />
+      <BasicTable
+        columns={columns}
+        rows={reviews}
+        fetchMoreData={fetchMoreData}
+      />
     </Container>
   );
 }

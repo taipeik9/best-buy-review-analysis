@@ -3,7 +3,9 @@ import { Product } from "../(assets)/types";
 import ItemCard from "../(components)/ItemCard";
 
 export default async function ProductsPage() {
-  const response = await fetch("http://0.0.0.0/products/");
+  const response = await fetch("http://0.0.0.0/products/", {
+    cache: "no-store",
+  });
   const products = await response.json();
 
   return (

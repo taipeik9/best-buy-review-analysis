@@ -1,6 +1,6 @@
 fastapi[standard]==0.115.0
-itemadapter==0.4.0
+itemadapter==0.9.0
 pydantic==2.9.2
-Scrapy==2.8.0
+python_dateutil==2.9.0.post0
+Scrapy==2.11.2
 SQLAlchemy==2.0.35
-Twisted==21.7.0

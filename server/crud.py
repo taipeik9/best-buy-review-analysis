@@ -191,7 +191,13 @@ def get_scraping_session(db: Session, session_id: UUID):
 
 # get all scraping sessions
 def get_scraping_sessions(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.ScrapingSession).offset(skip).limit(limit).all()
+    return (
+        db.query(models.ScrapingSession)
+        .order_by(models.ScrapingSession.scraping_started.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 # create scraping session
