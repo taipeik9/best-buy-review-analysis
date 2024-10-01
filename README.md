@@ -12,6 +12,18 @@ With this web app you can search query whatever you want on Best Buy and collect
 
 I used NextJS for the front end, FastAPI for the back end and SQLite for the database. This is my first time working with FastAPI, NextJS and Typescript. So, any feedback is welcome. I decided to go with FastAPI, even though I am unfamiliar with it because my webscraper was done in Python using the Scrapy package. I tried going with a NodeJS express API and having it make calls to the Python webscraper but in the end I decided to learn something new to prevent overcomplicating the issue.
 
+### Using the Webapp
+
+1. open up two terminal windows
+2. `cd` to the `server` folder
+3. create a python environment and `pip install -r requirements.txt`
+4. execute `uvicorn server:app --host 0.0.0.0 --port 80` and the API will be up
+5. switch to the other terminal window
+6. `cd` to the `bestbuy-webapp`folder
+7. execute `npm install`
+8. execute `npm run dev`
+9. navigate to http://localhost:3000/
+
 ### Current Development and Looking Forward
 This project has been so much fun. I am excited to expand on it. Right now you can:
 - query anything on Best Buy and collect all of the reviews for related products
